@@ -22,9 +22,9 @@ HandleFIQ:
 reset:
 	ldr sp,=4096
 	bl disable_watchdog
-	msr cspr_c,#0xd2 @enter interrupt mode
+	msr cpsr_c,#0xd2 @enter interrupt mode
 	ldr sp,=3072	@settup sp pointer
-	msr cspr_c,#0xdf	@enter sys mode
+	msr cpsr_c,#0xdf	@enter sys mode
 	ldr sp,=4096	@setup sp pointer
 	bl ledinit
 	bl irqinit
