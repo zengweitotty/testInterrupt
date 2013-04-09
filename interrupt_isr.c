@@ -16,33 +16,34 @@
 
 void EINT_Handle(void){
 	volatile unsigned long temp = GPBDAT;
+	unsigned long offset = INTOFFSET;
 	int flag = 0;
 	/*disable intertupt*/
-	EINTMASK = 0xff;
-	INTMSK = 0xff;
-	switch(INTOFFSET){
-	case 0x01:
+	EINTMASK = 0xffffffff;
+	INTMSK = 0xffffffff;
+	switch(offset){
+	case 0x00:
 		if(temp & (0x1 << 8)){	//led_4
 			GPBDAT &= ~(0x1 << 8);
 		}else{
 			GPBDAT |= (0x1 << 8);		
 		}
 		break;
-	case 0x02:
+	case 0x01:
 		if(temp & (0x1 << 5)){	//led_1
 			GPBDAT &= ~(0x1 << 5);
 		}else{
 			GPBDAT |= (0x1 << 5);		
 		}
 		break;
-	case 0x04:
+	case 0x02:
 		if(temp & (0x1 << 7)){	//led_3
 			GPBDAT &= ~(0x1 << 7);
 		}else{
 			GPBDAT |= (0x1 << 7);		
 		}
 		break;
-	case 0x10:	//EINT4-EINT7
+	case 0x04:	//EINT4-EINT7
 		if(EINTPEND & (0x1 << 4)){
 			flag = 1;
 			if(temp & (0x1 << 6)){	//led_2
@@ -58,17 +59,19 @@ void EINT_Handle(void){
 		break;
 	}
 	if(flag == 1){	//ENIT4 -- EINT7
-		EINTPEND = EINTPEND;
+		//EINTPEND |= (1 << 4);
+		EINTPEND = 0xffffffff;
 	}
-	INTPND = INTPND;
-	SRCPND = SRCPND;
+	//INTPND |= (1 << offset);
+	//SRCPND |= (1 << offset);
+	INTPND = 0xffffffff;
+	SRCPND = 0xffffffff;
 	/*Enable EINT0 EINT1 EINT2 EINT4*/
 	INTMSK = ~(0x1 << 0 |
 	           0x1 << 1 |
-	           0x1 << 2|
+	           0x1 << 2	|
 	           0x1 << 4
 	           );
 	/*Enable EINT4*/
 	EINTMASK = ~(0x1 << 4);
-
 }

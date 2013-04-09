@@ -6,7 +6,7 @@
     Email:          zengweitotty@gmail.com
     Description     main loop
 */
-
+#define GPBDAT  (*(volatile unsigned long *)0x56000014)
 int main(void){
 	while(1){
 		;;	//main loop		

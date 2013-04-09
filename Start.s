@@ -22,13 +22,13 @@ HandleFIQ:
 reset:
 	ldr sp,=4096
 	bl disable_watchdog
-	msr cpsr_c,#0xd2 @enter interrupt mode
+	msr cpsr,#0xd2 @enter interrupt mode
 	ldr sp,=3072	@settup sp pointer
-	msr cpsr_c,#0xdf	@enter sys mode
+	msr cpsr,#0xdf	@enter sys mode
 	ldr sp,=4096	@setup sp pointer
 	bl ledinit
 	bl irqinit
-	msr cpsr_c,#0x5f	@open global Interrupt
+	msr cpsr,#0x5f	@open global Interrupt
 	bl main
 halt_loop:
 	b halt_loop
